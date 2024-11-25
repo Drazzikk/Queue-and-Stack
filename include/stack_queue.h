@@ -180,6 +180,8 @@ public:
 template<typename T>
 class Queue : private TVector<T> {
 private:
+    using TVector<T>::cap;
+    using TVector<T>::pMem;
     size_t front;
     size_t back;
 
