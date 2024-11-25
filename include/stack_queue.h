@@ -181,6 +181,7 @@ template<typename T>
 class Queue : private TVector<T> {
 private:
     size_t front;
+    size_t back;
 
 public:
     using TVector<T>::Full;
@@ -188,17 +189,21 @@ public:
     using TVector<T>::size;
     using TVector<T>::getCapacity;
 
-    Queue() : TVector<T>(0), front(0) {}
+    Queue() : TVector<T>(0), front(0), back(0) {}
 
     void push(T elem) {
         this->push_back(elem);
+        if (back == cap)
+            back = 0;
+        else
+            back++;
     }
 
     void pop() {
         if (Empty()) throw std::domain_error("domain_error");
         ++front;
 
-        if (front >= this->sz)
+        if (front >= this->cap)
             front = 0;
 
         --this->sz;
@@ -206,6 +211,12 @@ public:
 
     T getFront() const noexcept {
         return this->pMem[front];
+    }
+
+    T getBack() const noexcept {
+        if (back == 0)
+            return pMem[cap - 1];
+        return pMem[back - 1];
     }
 
 };
@@ -231,9 +242,10 @@ public:
         }
 
         if (!this->pMem[0].Empty())
+        {
             this->pMem[0].pop();
-
-        sz--;
+            sz--;
+        }
     }
 
     void push(T elem) {

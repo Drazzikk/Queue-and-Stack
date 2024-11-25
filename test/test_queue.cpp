@@ -58,3 +58,10 @@ TEST(Queue, push_and_pop) {
     EXPECT_NO_THROW(queue.pop());
     EXPECT_TRUE(queue.Empty()); 
 }
+
+TEST(Queue, get_back) {
+    Queue<int> queue;
+    queue.push(1);
+    queue.push(2);
+    EXPECT_EQ(queue.getBack(), 2);
+}
